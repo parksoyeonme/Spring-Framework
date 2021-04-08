@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="student">
+   <insert id="insertStudent" parameterType="com.kh.student.model.vo.Student">
+  							 <!-- 파라미터타입을 설명 -->
+      insert into 
+         student
+      values (
+         seq_student_no.nextval, 
+         #{name}, 
+         #{tel})
+   </insert>
+   <!-- 파라미터타입을 별칭으로 사용할 수 있다는 예시 -->
+   <insert id="insertStudentMap" parameterType="hashmap">
+      insert into 
+         student
+      values (
+         seq_student_no.nextval, 
+         #{name}, 
+         #{tel})
+   </insert>
+   
+   <!-- select쿼리는 resultType속성을 생략할 수 없다. -->
+   <select id="selectTotalStudents" resultType="_int">
+      select
+         count(*)
+      from student
+   </select>
+   
+   <select id="selectOne" resultType="student">
+      select
+         *
+      from
+         student
+      where
+         no = #{no}
+   </select>
+   
+   <update id="updateStudent">
+      update
+         student
+      set
+         name = #{name},
+         tel = #{tel}
+      where
+         no = #{no}
+   </update>
+   
+   <delete id="deleteStudent">
+   	delete from
+   		student
+   	where
+   		no = #{no}
+   </delete>
+  <!--    <select id="selectStudentMap" resultType="map"> -->
+   <select id="selectStudentMap" resultMap="studentMap">
+<!--       select -->
+<!--          no "studentNo", -->
+<!--          name "studentName", -->
+<!--          tel "studentTel" -->
+<!--       from -->
+<!--          student -->
+<!--       where -->
+<!--          no = #{no} -->
+         select
+            *
+         from
+            student
+         where
+            no = #{no}
+   </select>
+<!--    property는 java에서 쓰일 map의 키값 -->
+   <resultMap type="map" id="studentMap">
+      <id column="no" property="studentNo"/> <!-- pk -->   
+      <result column="name" property="studentName"/> <!-- 나머지 컬럼 -->
+      <result column="tel" property="studentTel"/> 
+   </resultMap>
+</mapper>
