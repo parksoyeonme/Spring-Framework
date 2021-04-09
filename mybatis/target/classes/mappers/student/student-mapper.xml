@@ -72,9 +72,32 @@
             no = #{no}
    </select>
 <!--    property는 java에서 쓰일 map의 키값 -->
+<!-- 재사용가능 -->
    <resultMap type="map" id="studentMap">
       <id column="no" property="studentNo"/> <!-- pk -->   
       <result column="name" property="studentName"/> <!-- 나머지 컬럼 -->
       <result column="tel" property="studentTel"/> 
    </resultMap>
+   
+   <!-- 여러행을 리턴하는 경우에도 resultType은 한행에 일치하는 타입을 작성한다. -->
+   <!--  resultType="com.kh.student.model.vo.Student", "student"-->
+   <select id="selectStudentList" resultType="com.kh.student.model.vo.Student">
+   <!-- 별칭list쓰면 망함.-->
+     select
+        *
+     from
+        student
+     order by
+     	no
+   </select>
+   
+    <select id="selectStudentMapList" resultMap="studentMap">
+    
+    select
+        *
+     from
+        student
+     order by
+     	no
+     </select>
 </mapper>

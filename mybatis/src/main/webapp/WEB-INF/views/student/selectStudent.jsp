@@ -143,9 +143,18 @@ $("#ajaxSelectStudentBtn").click(function(){
 		dataType: "json",
 		success: function(data){
 			console.log(data);
+			if(data){
+				var $table = $(ajaxSelectStudent);
+				$table.find("[name=no]").val(data.studentNo);
+				$table.find("[name=name]").val(data.studentName);
+				$table.find("[name=tel]").val(data.studentTel);			
+			}
+			else {
+				alert("해당학생이 존재하지 않습니다.");
+			}
 		},
 		error: function(xhr, status, err){
-			console.log(xhr, status, err);
+			console.log(xhr, status, err); 
 		}
 	});
 	

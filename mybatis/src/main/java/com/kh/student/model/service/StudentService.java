@@ -2,6 +2,7 @@ package com.kh.student.model.service;
 
 import static com.kh.common.SqlSessionTemplate.getSqlSession;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -103,5 +104,21 @@ public class StudentService implements IStudentService {
 		Map<String, Object> student = studentDao.selectStudentMap(session, no);
 		session.close();
 		return student;
+	}
+
+	@Override
+	public List<Student> selectStudentList() {
+		SqlSession session = getSqlSession();
+		List<Student> list = studentDao.selectStudentList(session);
+		session.close();
+		return list;
+	}
+
+	@Override
+	public List<Map<String, Object>> selectStudentMapList() {
+		SqlSession session = getSqlSession();
+		List<Map<String, Object>> mapList = studentDao.selectStudentMapList(session);
+		session.close();
+		return mapList;
 	}
 }

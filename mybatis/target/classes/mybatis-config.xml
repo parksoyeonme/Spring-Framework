@@ -21,5 +21,6 @@
   
   <mappers>
     <mapper resource="/mappers/student/student-mapper.xml"/>
+    <mapper resource="/mappers/emp/emp-mapper.xml"/>
   </mappers>
 </configuration>

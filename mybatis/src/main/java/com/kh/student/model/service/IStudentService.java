@@ -1,5 +1,6 @@
 package com.kh.student.model.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.kh.student.model.vo.Student;
@@ -19,5 +20,9 @@ public interface IStudentService {
 	int deleteStudent(int no);
 
 	Map<String, Object> selectStudentMap(int no);
+
+	List<Student> selectStudentList();
+
+	List<Map<String, Object>> selectStudentMapList();
 
 }
