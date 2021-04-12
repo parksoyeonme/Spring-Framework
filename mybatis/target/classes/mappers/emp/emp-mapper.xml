@@ -81,6 +81,25 @@
   order by emp_id 됨
   -->
     
+   <select id="selectJobList" resultType="map">
+  	select
+  		job_code "jobCode", 
+  		job_name "jobName"
+  	from
+  		job
+	order by
+		job_code
+  </select>
+  
+  <select id="selectdeptList" resultType="map">
+  select
+  		dept_id "deptCode", 
+  		dept_title "deptTitle"
+  	from
+  		dept
+	order by
+		dept_id
+  </select>
    
 <!--    property는 java에서 쓰일 map의 키값 -->
    <resultMap type="map" id="empMap">
@@ -99,5 +118,45 @@
       <result column="quit_date" property="quitDate"/> 
       <result column="quit_yn" property="quitYN"/> 
       <result column="gender" property="gender"/> 
+      
+      <result column="job_name" property="jobName"/> 
+      <result column="dept_title" property="deptTitle"/> 
+      <result column="dept_id" property="deptId"/>
+      
    </resultMap>
+   
+    <select id="search3" resultMap="empMap">
+      select
+         *
+      from (
+         select
+            e.*,
+            decode(substr(emp_no, 8, 1), '1', '남', '3', '남', '여') gender,
+            (select job_name from job where job_code = e.job_code) job_name,
+            (select dept_title from dept where dept_id = e.dept_code) dept_title
+            <!-- nvl((select dept_title from dept where dept_id = e.dept_code),'인턴') dept_title -->
+         from
+            emp e
+      )
+      <!-- where job_name in ('J1', 'J2') -->
+      <where>
+         <if test="jobCodeArr != null">
+         job_code in
+            <foreach collection="jobCodeArr" item="jobCode" open="(" close=")" separator=",">
+            #{jobCode}
+            </foreach>
+         </if>
+         <if test="deptCodeArr != null">
+          and nvl(dept_code, 'D0') in
+           <foreach collection="deptCodeArr" item="deptCode" open="(" close=")" separator=",">
+           #{deptCode}            
+           </foreach>
+         </if>   
+         <if test="false">
+  		<!-- nvl(dept_code,'D0') in ('D0', 'D1') -->
+  		</if>
+      </where>
+   </select>
+   
+
 </mapper>

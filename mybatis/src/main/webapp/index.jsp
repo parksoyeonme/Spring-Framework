@@ -19,6 +19,7 @@
 	<ul>
 		<li><a href="${pageContext.request.contextPath}/emp/searchEmp1.do">사원 조회1</a></li>
 		<li><a href="${pageContext.request.contextPath}/emp/searchEmp2.do">사원 조회2</a></li>
+		<li><a href="${pageContext.request.contextPath}/emp/searchEmp3.do">사원 조회3</a></li>
 	</ul>
 	
 	
