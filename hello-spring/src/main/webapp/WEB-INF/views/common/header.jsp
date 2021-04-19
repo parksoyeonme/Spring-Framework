@@ -16,6 +16,13 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 <!-- 사용자작성 css -->
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/style.css" />
+
+<%-- RedirectAttribute.addFlashAttribute의 저장된 속성값 사용(1회용) --%>
+<c:if test="${not empty msg}">
+<script>
+alert("${msg}");
+</script>   
+</c:if>
 </head>
 <body>
 <div id="container">

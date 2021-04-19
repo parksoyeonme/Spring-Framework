@@ -150,6 +150,16 @@
 			<artifactId>commons-dbcp</artifactId>
 			<version>1.4</version>
 		</dependency>
+		<!-- 개발시 reload 기능지원 -->
+		<!-- https://mvnrepository.com/artifact/org.springframework/springloaded -->
+		<!--  <scope>provided</scope> compile때만 사용. runtime때는 사용안함. -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>springloaded</artifactId>
+		    <version>1.2.8.RELEASE</version>
+		    <scope>provided</scope>
+		</dependency>
+		
 	</dependencies>
     <build>
         <plugins>
