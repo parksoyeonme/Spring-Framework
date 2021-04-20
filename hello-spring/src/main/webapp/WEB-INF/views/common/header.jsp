@@ -54,9 +54,16 @@ alert("${msg}");
                         </div>
 				    </li>
 			    </ul>
-			    <button class="btn btn-outline-success my-2 my-sm-0" type="button" >로그인</button>
+			    <%-- 1.로그인 하지 않은 경우 --%>
+			    <c:if test="${loginMember == null}">
+			    <button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick="location.href='${pageContext.request.contextPath}/member/login.do';">로그인</button>
                 &nbsp;
-                <button class="btn btn-outline-success my-2 my-sm-0" type="button">회원가입</button>
+                <button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick="location.href='${pageContext.request.contextPath}/member/memberEnroll.do';">회원가입</button>
+			 	</c:if>
+			 	<%-- 2.로그인한 경우 --%>
+			    <c:if test="${loginMember != null}">
+					<span>${loginMember.name}님, 안녕하세요.</span>			    
+			    </c:if>
 			 </div>
 		</nav>
 	</header>

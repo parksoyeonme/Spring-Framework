@@ -37,12 +37,12 @@ public class DemoServiceImpl implements DemoService {
 
 	@Override
 	public int updateDev(Dev dev) {
-		//1.SqlSession객체 생성
-		//2.dao 업무요청
-		//3.트랜잭션처리(DML)
-		//4.SqlSession반납
-		int result = demoDao.updateDev(dev);
-		return result;
+	 /**
+	    * transaction처리(AOP)
+	    * 예외가 발생하지 않으면 commit
+	    * 예외가 발생하면 rollback
+	    */
+		return demoDao.updateDev(dev);
 	}
 
 	@Override
@@ -58,6 +58,7 @@ public class DemoServiceImpl implements DemoService {
 		//4.SqlSession반납
 		int result = demoDao.deleteDev(no);
 		return result;
+		//return demoDao.deleteDev(no);
 	}
 
 	

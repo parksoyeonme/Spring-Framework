@@ -17,19 +17,19 @@
       <th scope="col">수정</th>
       <th scope="col">삭제</th>
     </tr>
-    <tr>
-	   <c:forEach items="${list}" var="dev">
-		   	<td>${dev.no}</td>
-		   	<td>${dev.name}</td>
-		   	<td>${dev.career}</td>
-		   	<td>${dev.email}</td>
-		   	<td>${dev.gender == 'M' ? '남' : (dev.gender == 'F' ? '여' : '')}</td>
-		   	<td>
-			   	<c:forEach items="${dev.lang}" var="lang" varStatus="vs">
-				${lang}${vs.last ? '' : ','}
-				</c:forEach>
-			</td>
-			<td>
+ 	<c:forEach items="${list}" var="dev">
+	<tr>
+		<td>${dev.no}</td>
+		<td>${dev.name}</td>
+		<td>${dev.career}</td>
+		<td>${dev.email}</td>
+		<td>${dev.gender == "M" ? "남" : "여"}</td>
+		<td>
+		<c:forEach items="${dev.lang}" var="lang" varStatus="vs">
+		${lang}${vs.last ? '' : ','}		
+		</c:forEach>
+		</td>
+		<td>
 			<button type="button" class="btn btn-outline-info" onclick="updateDev(${dev.no});">수정</button>
 		</td>
 		<td>
@@ -39,13 +39,22 @@
 	</c:forEach>
  
 </table>
+<form 
+	name="devDelFrm" 
+	action="${pageContext.request.contextPath}/demo/deleteDev.do" 
+	method="POST">
+	<input type="hidden" name="no"/>
+</form>
 <script>
+function deleteDev(no){
+	if(confirm(`\${no}번 Dev정보를 삭제하시겠습니까?`)){
+		var $frm = $(document.devDelFrm);
+		$frm.find("[name=no]").val(no);
+		$frm.submit();
+	}
+}
 function updateDev(no){
 	location.href = `${pageContext.request.contextPath}/demo/updateDev.do?no=\${no}`;
-}
-
-function deleteDev(no){
-	location.href = `${pageContext.request.contextPath}/demo/deleteDev.do?no=\${no}`;
 }
 </script>	
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

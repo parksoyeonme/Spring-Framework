@@ -6,7 +6,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-
+<%
+	Dev dev = (Dev) request.getAttribute("dev");
+	String[] langArr = dev.getLang();
+	List<String> langList = langArr != null ? Arrays.asList(langArr) : null;
+	pageContext.setAttribute("langList", langList);
+%>
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="Demo" name="title"/>
 </jsp:include>
@@ -51,7 +56,8 @@ div#demo-container{
 				  <label class="form-check-label" for="gender0">남</label>
 				</div>
 				<div class="form-check form-check-inline">
-				  <input class="form-check-input" type="radio" name="gender" id="gender1" value="F" ${dev.gender eq 'F' ? 'checked' : ''}>
+				  <input class="form-check-input" type="radio" name="gender" 				  		 
+				  		 id="gender1" value="F" ${dev.gender eq 'F' ? 'checked' : ''}>
 				  <label class="form-check-label" for="gender1">여</label>
 				</div>
 			</div>
@@ -60,19 +66,19 @@ div#demo-container{
 			<label class="col-sm-2 col-form-label">개발언어</label>
 			<div class="col-sm-10">
 				<div class="form-check form-check-inline">
-				  <input class="form-check-input" type="checkbox" name="lang" id="Java" value="Java">
+				  <input class="form-check-input" type="checkbox" name="lang" id="Java" value="Java" ${langList.contains('Java') ? 'checked' : ''}>
 				  <label class="form-check-label" for="Java">Java</label>
 				</div>
 				<div class="form-check form-check-inline">
-				  <input class="form-check-input" type="checkbox" name="lang" id="C" value="C">
+				  <input class="form-check-input" type="checkbox" name="lang" id="C" value="C" ${langList.contains('C') ? 'checked' : ''}>
 				  <label class="form-check-label" for="C">C</label>
 				</div>
 				<div class="form-check form-check-inline">
-				  <input class="form-check-input" type="checkbox" name="lang" id="Javascript" value="Javascript">
+				  <input class="form-check-input" type="checkbox" name="lang" id="Javascript" value="Javascript" ${langList.contains('Javascript') ? 'checked' : ''}>
 				  <label class="form-check-label" for="Javascript">Javascript</label>
 				</div>
 				<div class="form-check form-check-inline">
-				  <input class="form-check-input" type="checkbox" name="lang" id="Python" value="Python">
+				  <input class="form-check-input" type="checkbox" name="lang" id="Python" value="Python" ${langList.contains('Python') ? 'checked' : ''}>
 				  <label class="form-check-label" for="Python">Python</label>
 				</div>
 			</div>
@@ -86,13 +92,25 @@ div#demo-container{
 <script>
 /**
  * 수정폼 유효성검사
- * 
+ * 값이 유효하지 않은 경우 
+ * 1. return false
+ * 2. event.preventDefault()
  */
-$(document.devFrm).submit((e) => {
-	//1. 이름은 한글 2글자 이상이어야 한다.
-	
-	//2. 개발언어는 하나이상 선택해야 한다.
-	
-});
+ $(devFrm).submit((e) => {
+	   //1. 이름은 한글 2글자 이상이어야 한다.
+	   var $name = $("#name");
+	     if(/^[가-힣]{2,}$/.test($name.val())==false){
+	         alert("이름은 한글 2글자 이상이어야 합니다.");
+	         $name.select();
+	       e.preventDefault();
+	     }
+	   
+	   //2. 개발언어는 하나이상 선택해야 한다.
+	    var $langChecked = $("[name=lang]:checked");
+	    if ($langChecked.length==0){
+	        alert("개발언어는 하나 이상 선택해야 합니다.");
+	       e.preventDefault();
+	     }         
+	});
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

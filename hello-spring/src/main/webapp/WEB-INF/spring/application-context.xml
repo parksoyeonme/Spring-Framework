@@ -36,6 +36,9 @@
 	<!-- 여러 dao에서 공유하므로 메모리관리에 있어 최적화된 테크닉. -->
 	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg index="0" ref="sqlSessionFactoryBean"/>
-		
 	</bean>
+	
+	<!-- #8.1 spring-security가 제공하는 BCryptPasswordEncoder빈을 등록 -->
+	<bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+	
 </beans>

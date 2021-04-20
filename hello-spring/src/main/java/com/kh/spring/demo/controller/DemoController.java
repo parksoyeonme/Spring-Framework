@@ -147,7 +147,7 @@ public class DemoController {
 		
 	}
 	
-
+	//한명클릭해서 폼에 나타내기
 	@GetMapping("/updateDev.do")
 	public String updateDev(@RequestParam(required = true) int no, Model model) {
 		//1.업무로직 : Dev 1명 조회
@@ -160,6 +160,7 @@ public class DemoController {
 		return "demo/devUpdateForm";
 	}
 	
+	//정보수정
 	@PostMapping("/updateDev.do")
 	public String updateDev(Dev dev, RedirectAttributes redirectAttr) {
 		//1.업무로직 : Dev 1명 수정
