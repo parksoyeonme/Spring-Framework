@@ -83,7 +83,8 @@
 					<artifactId>jmxri</artifactId>
 				</exclusion>
 			</exclusions>
-			<scope>runtime</scope>
+			<!-- <scope>runtime</scope> -->
+			<!-- 기본값 compile로 만든다는것 -->
 		</dependency>
 
 		<!-- @Inject -->

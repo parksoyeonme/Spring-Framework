@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -112,13 +113,17 @@ public class DemoController {
 	
 	/*
 	 * 커맨드객체 : 사용자입력값과 일치하는 필드에 값대임
-	 * 커맨드객체는 자동으로 model속성으로 지정
+	 * 커맨드객체는 자동으로 model속성으로 지정(@ModelAttribute생략해도 된다.)
+	 * public String dev3(@ModelAttribute("ddddev") Dev dev) {
+	 * public String dev3(@ModelAttribute Dev dev) {
+	 * public String dev3(Dev dev) {
 	 * */
 	
 //	@RequestMapping(value = "/dev3.do", method = RequestMethod.POST)
+	//
 	@PostMapping("/dev3.do")
-	public String dev3(Dev dev) {
-		
+	public String dev3(@ModelAttribute("ddddev") Dev dev) {
+		log.info("{}", dev);
 		return "demo/devResult";
 	}
 	

@@ -29,6 +29,19 @@
 	<!-- base package이하의 어노테이션 : @Component, @Autowired 등 빈을 등록/연결 처리 -->
 	<context:component-scan base-package="com.kh.spring" />
 	
-	
+	<!-- #9.1 handler interceptor 등록 -->
+	<interceptors>
+		<interceptor>
+			<mapping path="/**"/>
+			<beans:bean id="loggerInterceptor" class="com.kh.spring.common.interceptor.LoggerInterceptor"/>		
+		</interceptor>
+		<interceptor>
+         <mapping path="/member/**/*.do"/>
+         <exclude-mapping path="/member/login.do"/>
+         <exclude-mapping path="/member/memberEnroll.do"/>
+
+         <beans:bean id="LoginInterceptor" class="com.kh.spring.common.interceptor.LoginInterceptor"/>
+      </interceptor>
+	</interceptors>
 	
 </beans:beans>

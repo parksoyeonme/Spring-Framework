@@ -34,6 +34,9 @@ $(() => {
 </script>
 </head>
 <body>
+${test}
+${common.adminEmail}
+${next}
 
 	<!-- Modal시작 -->
 	<!-- https://getbootstrap.com/docs/4.1/components/modal/#live-demo -->

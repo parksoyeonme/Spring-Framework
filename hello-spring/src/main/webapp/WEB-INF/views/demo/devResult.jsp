@@ -6,7 +6,7 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="Dev 등록결과" name="title" />
 </jsp:include>
-
+${ddddev}
 <table class="table w-50 mx-auto" >
 	<tr>
 		<th scope="col">이름</th>
