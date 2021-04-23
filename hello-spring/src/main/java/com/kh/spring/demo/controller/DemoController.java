@@ -142,7 +142,7 @@ public class DemoController {
 	}
 	
 	@GetMapping("/devList.do")
-	public String devListy(Model model) {
+	public String devList(Model model) {
 		//1. 업무로직
 		List<Dev> list = demoService.selectDevList();
 		log.info("list = {}", list);

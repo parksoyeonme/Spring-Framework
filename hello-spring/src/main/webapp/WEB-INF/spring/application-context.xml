@@ -12,13 +12,23 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!-- #6.1. datasource & mybatis 관련 빈 등록 -->
 	<bean class="org.apache.commons.dbcp.BasicDataSource"
-		  id="dataSource"
+		  id="realDataSource"
 		  destroy-method="close">
 		<property name="driverClassName" value="${datasource.driver}"/>
 		<property name="url" value="${datasource.url}"/>
 		<property name="username" value="${datasource.username}"/>
 		<property name="password" value="${datasource.password}"/>
 	</bean>
+	<!-- #10.1 log4jdbc-remix의 ProxyDataSorce빈 등록 -->
+	<bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">  
+            <constructor-arg ref="realDataSource" />
+            <property name="logFormatter">
+                <bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">    
+                    <property name="loggingType" value="MULTI_LINE" />
+                    <property name="sqlPrefix" value="[SQL] " />
+                </bean>
+            </property>
+        </bean>
 	<!-- #6.2. myBatis(JDBC)설정 : SqlSessionFactory -->
 	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<!-- name=dataSource => 빈객체sqlSessionFactoryBean의  property명 dataSource임(setter) -->

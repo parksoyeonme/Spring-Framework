@@ -10,6 +10,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.kh.spring.member.model.exception.MemberException;
 import com.kh.spring.member.model.service.MemberService;
 import com.kh.spring.member.model.vo.Member;
 
@@ -198,4 +200,33 @@ public class MemberController {
 		mav.setViewName("member/memberDetail");
 		return mav;
 	}
+
+	@PostMapping("/memberUpdate.do")
+	public String memberUpdate(@ModelAttribute Member member, ModelMap model, RedirectAttributes redirectAttributes){
+		try {
+			log.debug("member = {} ", member);
+				
+			//1.비지니스로직 실행
+			int result = memberService.updateMember(member);
+			
+			//2.처리결과에 따라 view단 분기처리
+			String msg = "회원정보수정성공!";
+			if(result > 0){
+				//회원정보 수정 성공시 session객체 갱신
+				Member updateMember = memberService.selectOneMember(member.getId());
+				model.addAttribute("loginMember", updateMember);
+			}
+			else {
+				throw new MemberException("해당회원이 존재하지 않습니다 : " + member.getId());
+			}
+			redirectAttributes.addFlashAttribute("msg", msg);
+			
+		} catch(Exception e) {
+			log.error("회원 정보 수정 실패", e);
+			throw e;
+		}
+		return "redirect:/";
+	}
+
+	
 }

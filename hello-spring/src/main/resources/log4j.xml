@@ -43,7 +43,24 @@
    * %r : 어플리케이션 시작 이후 부터 로깅이 발생한 시점의 시간(milliseconds)
    * %X : 로깅이 발생한 thread와 관련된 MDC(mapped diagnostic context)를 출력합니다. %X{key} 형태.
    -->
-   
+    <!-- #10.2.log4jdbc-remix 로그 출력 appender 추가 -->
+	<appender name="sqlLogger" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p: %m%n" />
+		</layout>
+	</appender>
+    <!-- #10.3.log4jdbc-remix 관련 logger 시작 -->
+	<!-- Query Loggers  -->
+	<!-- additivity="false" 위로 올라가지 않는다. -->
+	<logger name="jdbc.sqlonly" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="sqlLogger"/>
+	</logger>
+	<logger name="jdbc.resultsettable" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="sqlLogger"/>
+	</logger>
+	
    <!-- Application Loggers -->
    <logger name="com.kh.spring">
       <level value="debug" />

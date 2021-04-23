@@ -3,9 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 
 	<!-- 이 스프링 설정파일의 기본 namespace는 mvc이다. mvc태그를 제외하고, 다른 namesapce는 접두어를 사용해야 한다.  -->
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
@@ -43,5 +45,24 @@
          <beans:bean id="LoginInterceptor" class="com.kh.spring.common.interceptor.LoginInterceptor"/>
       </interceptor>
 	</interceptors>
+	
+	<!-- #11.1 선언적 aop 작성   -->
+	<!-- xml로 처리하는것 
+	<beans:bean id="loggerAspect" class="com.kh.spring.common.aop.LoggerAspect"/>
+	
+	<aop:config>
+		<aop:aspect id="loggerAspect" ref="loggerAspect">
+			<aop:before method="beforeAdvice" pointcut-ref="loggerPointcut"/>
+			<aop:around method="aroundAdvice" pointcut-ref="loggerPointcut"/>
+			<aop:pointcut expression="execution(* com.kh.spring.memo..*(..))" id="loggerPointcut"/>
+		</aop:aspect>
+	</aop:config>
+	-->
+	<!-- #11.1 anotation aop 작성 -->
+	<!--
+		1. aop관련 anotation처리 & 
+		2. application-context의 aop관련설정을 servlet-context적용 
+	-->
+	<aop:aspectj-autoproxy />
 	
 </beans:beans>
