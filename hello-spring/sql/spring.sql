@@ -94,3 +94,5 @@ values(
 );
 
 select * from memo;
+
+delete from memo where no=9;
