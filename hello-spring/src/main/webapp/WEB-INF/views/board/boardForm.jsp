@@ -28,7 +28,7 @@ function boardValidate(){
 <div id="board-container">
 	<form name="boardFrm" action="${pageContext.request.contextPath}/board/boardEnroll.do" method="post" onsubmit="return boardValidate();">
 		<input type="text" class="form-control" placeholder="제목" name="title" id="title" required>
-		<input type="text" class="form-control" name="memberId" value="${loginMember.memberId}" readonly required>
+		<input type="text" class="form-control" name="memberId" value="${loginMember.id}" readonly required>
 		<!-- input:file소스 : https://getbootstrap.com/docs/4.1/components/input-group/#custom-file-input -->
 		<div class="input-group mb-3" style="padding:0px;">
 		  <div class="input-group-prepend" style="padding:0px;">

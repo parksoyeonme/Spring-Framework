@@ -11,4 +11,6 @@ public interface BoardDao {
 
 	int getTotalContents();
 
+	int boardEnroll(Board board);
+
 }

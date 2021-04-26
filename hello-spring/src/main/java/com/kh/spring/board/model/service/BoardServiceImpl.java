@@ -24,6 +24,11 @@ public class BoardServiceImpl implements BoardService {
 	public int getTotalContents() {
 		return boardDao.getTotalContents();
 	}
+
+	@Override
+	public int boardEnroll(Board board) {
+		return boardDao.boardEnroll(board);
+	}
 	
 	
 }

@@ -39,6 +39,8 @@
 		</interceptor>
 		<interceptor>
          <mapping path="/member/**/*.do"/>
+         <mapping path="/board/boardForm.do"/>
+         <mapping path="/board/boardEnroll.do"/>         
          <exclude-mapping path="/member/login.do"/>
          <exclude-mapping path="/member/memberEnroll.do"/>
 

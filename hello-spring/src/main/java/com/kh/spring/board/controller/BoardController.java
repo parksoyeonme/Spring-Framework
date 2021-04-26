@@ -10,12 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kh.spring.board.model.service.BoardService;
 import com.kh.spring.board.model.vo.Board;
 import com.kh.spring.common.HelloSpringUtils;
+import com.kh.spring.member.model.vo.Member;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,10 +60,23 @@ public class BoardController {
 	}
 	
 	@GetMapping("/boardForm.do")
-	public void boardForm() {
+	public void boardForm(HttpServletRequest request, Model model) {
 		
 	}
 	
+	@PostMapping("/boardEnroll.do")
+	public String boardEnroll(@ModelAttribute Board board, RedirectAttributes redirectAttr) {
+		try {
+			int result = boardService.boardEnroll(board);
+			String msg = "게시글 등록 성공!";
+			redirectAttr.addFlashAttribute("msg", msg);
+			
+		} catch (Exception e) {
+			log.error("게시글 등록 오류!", e);
+			throw e;
+		}
+		return "redirect:/board/boardList.do";
+	}
 	
 	
 	

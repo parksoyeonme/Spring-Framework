@@ -36,4 +36,9 @@ public class BoardDaoImpl implements BoardDao {
 	public int getTotalContents() {
 		return session.selectOne("board.getTotalContents");
 	}
+
+	@Override
+	public int boardEnroll(Board board) {
+		return session.insert("board.boardEnroll", board);
+	}
 }

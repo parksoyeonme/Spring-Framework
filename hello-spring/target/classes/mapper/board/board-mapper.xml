@@ -20,4 +20,17 @@
       from
          board
 	</select>
+	
+	<insert id="boardEnroll">
+	insert into board
+		values (
+			seq_board_no.nextval,
+			#{title},
+			#{memberId},
+			#{content},
+			default,
+			default
+		)
+	
+	</insert>
 </mapper>
