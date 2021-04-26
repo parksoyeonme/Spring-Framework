@@ -5,11 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.FlashMap;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.kh.spring.member.model.exception.MemberException;
 import com.kh.spring.member.model.service.MemberService;
@@ -144,12 +147,12 @@ public class MemberController {
 	}
 	
 	@PostMapping("/login.do")
-	public String login(
+	public ModelAndView login(
 			@RequestParam String id,
 			//@RequestParam = 필수값
 			@RequestParam String password,
-			Model model,
-			RedirectAttributes redirectAttr
+			ModelAndView mav,
+			HttpServletRequest request
 	) {
 		try {
 			log.info("id = {}, password = {}", id, password);
@@ -165,11 +168,14 @@ public class MemberController {
 				//로그인 성공
 				//기본값으로 request scope 속성에 저장.
 				//클래스레벨에 @SessionAttributes("loginMember") 지정하면, session scope에 저장
-				model.addAttribute("loginMember", member);
+				mav.addObject("loginMember", member);
 			}
 			else {
 				//로그인 실패
-				redirectAttr.addFlashAttribute("msg","아이디 또는 비밀번호가 일치하지 않습니다.");
+				//redirectAttr.addFlashAttribute("msg","아이디 또는 비밀번호가 일치하지 않습니다.");
+				//저장 output 꺼내올떄 input
+				FlashMap flashMap = RequestContextUtils.getOutputFlashMap(request);
+				flashMap.put("msg", "아이디 또는 비밀번호가 일치하지 않습니다.");
 			}
 			//3. 사용자피드백 및 리다이렉트
 		} catch(Exception e) {
@@ -178,7 +184,8 @@ public class MemberController {
 			//2.다시spring container에게 예외를 다시 던져서 error페이지로 이동시킨다.
 			throw e;
 		}
-		return "redirect:/";
+		mav.setViewName("redirect:/");
+		return mav;
 	}
 	
 	/*
