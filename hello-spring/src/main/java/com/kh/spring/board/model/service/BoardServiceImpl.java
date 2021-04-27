@@ -61,4 +61,14 @@ public class BoardServiceImpl implements BoardService {
 		return result;
 	}
 
+	@Override
+	public Board selectOneBoard(int no) {
+		Board board = boardDao.selectOneBoard(no);
+		List<Attachment> attachList = boardDao.selectAttachment(no);
+		log.debug("attachList = {}", attachList);
+		board.setAttachList(attachList);
+		
+		return board;
+	}
+
 }

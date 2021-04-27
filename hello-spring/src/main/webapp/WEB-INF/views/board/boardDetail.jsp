@@ -16,21 +16,22 @@ div#board-container label.custom-file-label{text-align:left;}
 <div id="board-container" class="mx-auto text-center">
 	<input type="text" class="form-control" 
 		   placeholder="제목" name="boardTitle" id="title" 
-		   value="" required>
+		   value="${board.title}" required>
 	<input type="text" class="form-control" 
 		   name="memberId" 
-		   value="" readonly required>
-
+		   value="${board.memberId}" readonly required>
+	<c:forEach items="${board.attachList}" var="attach">
 	<button type="button" 
 			class="btn btn-outline-success btn-block">
-		첨부파일 - 파일명
+		첨부파일 - ${attach.originalFileName}
 	</button>
+	</c:forEach>
 	
     <textarea class="form-control" name="content" 
-    		  placeholder="내용" required></textarea>
+    		  placeholder="내용" required>${board.content}</textarea>
     <input type="number" class="form-control" name="readCount" title="조회수"
-		   value="" readonly>
+		   value="${board.readCount}" readonly>
 	<input type="datetime-local" class="form-control" name="regDate" 
-		   value=''>
+		   value='<fmt:formatDate value="${board.regDate}" pattern="yyyy-MM-dd'T'HH:mm:ss"/>'>
 </div>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

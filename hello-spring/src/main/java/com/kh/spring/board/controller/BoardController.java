@@ -141,7 +141,23 @@ public class BoardController {
 		return "redirect:/board/boardList.do";
 	}
 	
-	
+	@GetMapping("/boardDetail.do")
+	public void boardDetail(@RequestParam int no, Model model) {
+		try {
+			
+			Board board = boardService.selectOneBoard(no);
+			log.info("board = {}", board);
+
+		model.addAttribute("board", board);
+		} catch(Exception e) {
+			//1.로깅작업
+			log.error(e.getMessage(),e);
+		
+			throw e;
+		}
+		
+		
+	}
 	
 	
 	

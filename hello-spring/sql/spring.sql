@@ -268,4 +268,4 @@ from (
 where rnum between 6 and 10;
 
 select *  from attachment;
-select * from board; order by no desc;
+select * from board order by no desc;

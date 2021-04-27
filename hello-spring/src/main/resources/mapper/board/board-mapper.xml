@@ -42,7 +42,7 @@
 		
 		<insert id="insertAttachment">
 			insert into
-				attachment(noooooo, board_no, original_filename, renamed_filename)
+				attachment(no, board_no, original_filename, renamed_filename)
 			values(
 				seq_attachment_no.nextval,
 				#{boardNo},
@@ -50,5 +50,23 @@
 				#{renamedFileName}
 			)
 		</insert>
+		
+		<select id="selectOneBoard" resultType="board">
+			select 
+				*
+			from
+				board
+			where
+				no = #{no}
+		</select>
+		
+		<select id="selectAttachment" resultType="attachment">
+			select
+				*
+			from
+				attachment
+			where
+				board_no = #{no}
+		</select>
 	
 </mapper>
