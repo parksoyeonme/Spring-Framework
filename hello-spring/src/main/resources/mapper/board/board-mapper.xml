@@ -21,16 +21,34 @@
          board
 	</select>
 	
-	<insert id="boardEnroll">
-	insert into board
-		values (
+	<insert id="insertBoard">
+		insert into
+			board (no, title, member_id, content)
+		values(
 			seq_board_no.nextval,
 			#{title},
 			#{memberId},
-			#{content},
-			default,
-			default
+			#{content}
 		)
+		<!-- 방금 insert된 board객체의 no컬럼(pk)값을 board.no에 대입 -->
+		<selectKey resultType="_int" keyProperty="no" order="AFTER">
+		select
+			seq_board_no.currval
+		from
+			dual
+		</selectKey>
+		</insert>
+		<!-- order="AFTER" 쿼리문번저 돌린 후에 물어봐주세요. -->
+		
+		<insert id="insertAttachment">
+			insert into
+				attachment(noooooo, board_no, original_filename, renamed_filename)
+			values(
+				seq_attachment_no.nextval,
+				#{boardNo},
+				#{originalFileName},
+				#{renamedFileName}
+			)
+		</insert>
 	
-	</insert>
 </mapper>
