@@ -1,5 +1,8 @@
 package com.kh.spring.member.model.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import com.kh.spring.member.model.vo.Member;
 
 public interface MemberDao {
@@ -9,5 +12,9 @@ public interface MemberDao {
 	Member selectOneMember(String id);
 
 	int updateMember(Member member);
+
+	
+
+	List<Member> selectAll(Map<String, Object> param);
 
 }

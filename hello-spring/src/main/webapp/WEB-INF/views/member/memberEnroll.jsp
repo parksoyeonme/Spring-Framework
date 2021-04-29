@@ -17,12 +17,17 @@
 			<tr>
 				<th>아이디</th>
 				<td>
-					<input type="text" 
-						   class="form-control" 
-						   placeholder="4글자이상"
-						   name="id" 
-						   id="id"
-						   required>
+					<div id="memberId-container">
+						<input type="text" 
+							   class="form-control" 
+							   placeholder="4글자이상"
+							   name="id" 
+							   id="id"
+							   required>
+						<span class="guide ok">이 아이디는 사용가능합니다.</span>
+						<span class="guide error">이 아이디는 이미 사용중입니다.</span>
+						<input type="hidden" id="idValid" value="0"/>
+					</div>
 				</td>
 			</tr>
 			<tr>
@@ -96,6 +101,43 @@
 	</form>
 </div>
 <script>
+$("#id").keyup(e => {
+	const id = $(e.target).val();
+	const $error = $(".guide.error");
+	const $ok = $(".guide.ok");
+	const $idValid = $("#idValid");
+	
+	//아이디 처음 작성하거나, 다시 작성하는 경우
+	if(id.length < 4){
+		$(".guide").hide();
+		$idValid.val(0);
+		return;
+	}
+	
+	$.ajax({
+		url: "${pageContext.request.contextPath}/member/checkIdDuplicate4.do",
+		data: {id},
+		success: data => {
+			console.log(data);
+			if(data.usable){
+				$error.hide(); 
+				//에러는 숨기고
+				$ok.show(); 
+				// 정상은 보여주고
+				$idValid.val(1); 
+				//value값은 1로
+			}
+			else{
+				$error.show();
+				$ok.hide();
+				$idValid.val(0);
+			}
+		},
+		error: (xhr, status, err) => {
+			console.log(xhr, status, err);
+		}
+	});
+});
 	
 $("#passwordCheck").blur(function(){
 	var $password = $("#password"), $passwordCheck = $("#passwordCheck");
@@ -104,13 +146,18 @@ $("#passwordCheck").blur(function(){
 		$password.select();
 	}
 });
-	
+
+
+/**
+ * 회원 등록 유효성검사
+ */
+ 
 $("[name=memberEnrollFrm]").submit(function(){
 
 	var $id = $("#id");
-	if(/^\w{4,}$/.test($memberId.val()) == false) {
+	if(/^\w{4,}$/.test($id.val()) == false) {
 		alert("아이디는 최소 4자리이상이어야 합니다.");
-		$memberId.focus();
+		$id.focus();
 		return false;
 	}
 	

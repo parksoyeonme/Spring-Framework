@@ -2,14 +2,23 @@ package com.kh.spring.board.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +26,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -24,9 +34,9 @@ import com.kh.spring.board.model.service.BoardService;
 import com.kh.spring.board.model.vo.Attachment;
 import com.kh.spring.board.model.vo.Board;
 import com.kh.spring.common.HelloSpringUtils;
-import com.kh.spring.member.model.vo.Member;
 
 import lombok.extern.slf4j.Slf4j;
+
 
 @Controller
 @RequestMapping("/board")
@@ -35,6 +45,12 @@ public class BoardController {
 
 	@Autowired
 	private BoardService boardService;
+	
+	@Autowired
+	private ResourceLoader resourceLoader;
+	
+	@Autowired
+	private ServletContext servletContext; // application객체
 	
 	@GetMapping("/boardList.do")
 	public void boardList(@RequestParam(defaultValue ="1") int cPage, Model model, HttpServletRequest request) {
@@ -143,24 +159,101 @@ public class BoardController {
 	
 	@GetMapping("/boardDetail.do")
 	public void boardDetail(@RequestParam int no, Model model) {
-		try {
-			
-			Board board = boardService.selectOneBoard(no);
-			log.info("board = {}", board);
-
+		//1. 업무로직
+//		Board board = boardService.selectOneBoard(no);
+		Board board = boardService.selectOneBoardCollection(no);
+		log.debug("board = {}", board);
+		
+		//2. jsp위임
 		model.addAttribute("board", board);
-		} catch(Exception e) {
-			//1.로깅작업
-			log.error(e.getMessage(),e);
+	}
+
+	/**
+	 * Resource 추상체
+	 * - Web상의 자원, classpath, filesystem자원을 모두 처리할 수 있는 스프링의 추상레이어
+	 *
+	 * @ResponseBody 현재메소드의 리턴객체를 http응답메세지 body에 직접 출력.
+	 * 
+	 * @param no
+	 * @return
+	 * @throws UnsupportedEncodingException 
+	 */
+	//method가 만들어내는것은 application/octet-stream;charset=utf-8 이 타입이다
+	@GetMapping(
+			value = "/fileDownload.do", 
+			produces = "application/octet-stream;charset=utf-8"
+		)
+	@ResponseBody
+	public Resource fileDownload(@RequestParam int no, HttpServletResponse response) 
+			throws UnsupportedEncodingException {
 		
-			throw e;
-		}
+		//1.업무조회
+		Attachment attach = boardService.selectOneAttachment(no);
+		log.debug("attach = {}", attach);
+	
+		String originalFileName = attach.getOriginalFileName();
+		String renamedFileName = attach.getRenamedFileName();
 		
+		//2. Resource준비
+		String saveDirectory = servletContext.getRealPath("/resources/upload/board");
+		File downFile = new File(saveDirectory, renamedFileName);
+		String location = "file:" + downFile;
+		log.debug("location = {}", location);
+//		Resource resource = resourceLoader.getResource(location);
+		Resource resource = new FileSystemResource(downFile);
 		
+		//3. 응답헤더
+		//한글파일 깨짐 방지
+		originalFileName = new String(originalFileName.getBytes("utf-8"), "iso-8859-1");
+		response.setContentType("application/octet-stream;charset=utf-8");
+		response.addHeader("Content-Disposition", "attachment;filename=\"" + originalFileName + "\"");
+		
+		return resource;
 	}
 	
-	
-	
-	
+	/**
+	 * ResponseEntity 
+	 * (@ResponseBody 기능 포함 - 응답http메세지 body에 리턴된 객체를 직접 작성)
+	 * 1. html이 아닌 data를 통신 - 리턴객체를 응답메세지 body에 직접 작성
+	 * 		- generic type객체가 출력됨.
+	 * 2. 응답헤더관련 내용을 직접 제어
+	 * 
+	 * 객체생성방법
+	 * 1. build방식
+	 * 2. new 연산자를 이용한 생성자 호출방식.
+	 * 
+	 * @param no
+	 * @return
+	 * @throws UnsupportedEncodingException 
+	 */
+	@GetMapping("/responseEntity/fileDownload.do")
+	public ResponseEntity<Resource> fileDownload(@RequestParam int no) throws UnsupportedEncodingException{
+		//1. 업무로직
+		Attachment attach = boardService.selectOneAttachment(no);
+		
+		if(attach == null)
+			return ResponseEntity.notFound().build();
+		
+		//2. Resource객체
+		String saveDirectory = servletContext.getRealPath("/resources/upload/board");
+		File downFile = new File(saveDirectory, attach.getRenamedFileName());
+		Resource resource = resourceLoader.getResource("file:" + downFile);
+		
+		//3. ResponseEntity객체
+		//한글파일 깨짐 방지
+		String originalFileName = attach.getOriginalFileName(); 
+		originalFileName = new String(originalFileName.getBytes("utf-8"), "iso-8859-1");
+		
+		return ResponseEntity
+						.ok() // statusCode : 200
+						.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE)
+						.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;fileName=\"" + originalFileName + "\"")
+						.body(resource);		
+	}
 	
 }
+
+
+
+
+

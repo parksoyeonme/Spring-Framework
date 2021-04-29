@@ -49,4 +49,14 @@
 		where 
 			id = #{id}
 	</update>
+	
+		
+	<select id="selectAll" resultType="member">
+		select
+		   *
+		from 
+		    member
+		 order by
+		 	enroll_date desc
+	</select>
 </mapper>

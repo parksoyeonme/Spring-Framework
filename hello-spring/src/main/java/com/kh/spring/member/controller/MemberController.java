@@ -1,16 +1,24 @@
 package com.kh.spring.member.controller;
 
 import java.beans.PropertyEditor;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +27,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.FlashMap;
@@ -26,14 +35,13 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
+import com.google.gson.Gson;
 import com.kh.spring.member.model.exception.MemberException;
 import com.kh.spring.member.model.service.MemberService;
 import com.kh.spring.member.model.vo.Member;
 
 import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
-
-
 
 /**
  * Model
@@ -208,6 +216,19 @@ public class MemberController {
 		return mav;
 	}
 
+	/**
+	 * id=honggd&name=홍길동&gender=M&hobby=영화&hobby=운동
+	 * 
+	 * -> @RequestParam String id, @RequestParam String name, ...
+	 * -> @ModelAttribute Member member
+	 * 
+	 * 모든 command객체는 model에 자동등록됨.
+	 * 
+	 * @param member
+	 * @param model
+	 * @param redirectAttributes
+	 * @return
+	 */
 	@PostMapping("/memberUpdate.do")
 	public String memberUpdate(@ModelAttribute Member member, ModelMap model, RedirectAttributes redirectAttributes){
 		try {
@@ -234,6 +255,105 @@ public class MemberController {
 		}
 		return "redirect:/";
 	}
-
+	/**
+	 * Spring Ajax
+	 * 1. BeanNameViewResolver : jsonView라는 bean을 이용해서 json출력
+	 * 2. 응답스트림 직접 작성  : 응답출력스트림에 json문자열 출력
+	 * 3. @ResponseBody : handler의 리턴객체를 messageConverter빈에 의해 json 변환 출력
+	 * 4. ResponseEntity
+	 * 
+	 * @param id
+	 * @return
+	 */
+	//bean에서 했기떄문에 produces = MediaType.APPLICATION_JSON_UTF8_VALUE 안해줘도댐
+	 @GetMapping(value = "/checkIdDuplicate1.do")
+	   public String checkIdDuplicate1(@RequestParam String id, Model model) {
+	      log.debug("id = {}",id);
+	      //1. 업무로직
+	      Member member = memberService.selectOneMember(id);
+	      //2. model 속성 지정(jsonView에 의해 json 문자열로 변환 후, 응답출력)
+	      log.debug("test = {}", member);
+	      boolean usable = member == null;
+	      //member가 null이 아닐때
+	      model.addAttribute("usable", usable);
+	      model.addAttribute("name", "홍길동");      
+	      model.addAttribute("num", 123);      
+	      
+	      return "jsonView";
+	   }
+	 
+	 //응답스트림 직접 작성  : 응답출력스트림에 json문자열 출력
+	 @GetMapping(value="/checkIdDuplicate2.do", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+		public void checIdDuplicate2(@RequestParam String id, 
+									 HttpServletResponse response,  
+									 PrintWriter out) {
+		 //produces=MediaType.APPLICATION_JSON_VALUE 이 잘 안먹혀서 직접 HttpServletResponse response을 적용
+			//1. 업무로직
+			Member member = memberService.selectOneMember(id);
+			boolean usable = (member == null);
+			Map<String, Object> map = new HashMap<>();
+			map.put("usable", usable);
+			map.put("name", "신사임당");
+			map.put("serverTime", new Date());
+			
+			//2. json문자열 응답메세지 출력
+			response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+			new Gson().toJson(map, out);
+			
+		}
 	
-}
+	 /**
+	  * RequestMappingHandlerAdapter빈에 등록된 MessageConverter빈에 의해 json변화 처리
+	  * 
+	  * 
+	  */
+	 //@ResponseBody 리턴객체를 messageConverter빈에 의해 json 변환 출력 사용하기
+	 @GetMapping("/checkIdDuplicate3.do")
+	 @ResponseBody
+	 public Map<String, Object> checkIdDuplicate3(@RequestParam String id) {
+		//1. 업무로직
+		Member member = memberService.selectOneMember(id);
+		boolean usable = (member == null);
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("usable", usable);
+		map.put("name", "세종");
+		map.put("serverTime", System.currentTimeMillis()); //new Date.getTime()
+			
+		 return map;
+	 }
+	 /**
+	  *	1. status code
+	  *	2. header값을 자유롭게 설정
+	  *	3. @ResponseBody 리턴객체를 json변화후 응답메세지에 작성 
+	  * 
+	  * 
+	  */
+	 //ResponseEntity 사용하기
+	 @GetMapping("/checkIdDuplicate4.do")
+		public ResponseEntity<Map<String, Object>> checkIdDuplicate4(@RequestParam String id){
+			//1. 업무로직
+			Member member = memberService.selectOneMember(id);
+			boolean usable = (member == null);
+			
+			//2. json변환 객체
+			Map<String, Object> map = new HashMap<>();
+			map.put("usable", usable);
+			map.put("name", "이순신");
+			map.put("serverTime", System.currentTimeMillis()); // new Date().getTime()
+			
+//			return ResponseEntity
+//					.ok()
+//					.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE)
+//					.body(map);
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+			
+			return new ResponseEntity<>(map, headers, HttpStatus.OK);
+			
+			
+			
+		}
+		
+		
+	}

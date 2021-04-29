@@ -6,6 +6,9 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="게시판" name="title"/>
 </jsp:include>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 <style>
 /*글쓰기버튼*/
 input#btn-add{float:right; margin: 0 0 15px;}
@@ -24,10 +27,49 @@ $(() => {
 		
 		location.href = `${pageContext.request.contextPath}/board/boardDetail.do?no=\${no}`;
 	});
+	
+	var availableTags = [
+	      "ActionScript",
+	      "AppleScript",
+	      "Asp",
+	      "BASIC",
+	      "C",
+	      "C++",
+	      "Clojure",
+	      "COBOL",
+	      "ColdFusion",
+	      "Erlang",
+	      "Fortran",
+	      "Groovy",
+	      "Haskell",
+	      "Java",
+	      "JavaScript",
+	      "Lisp",
+	      "Perl",
+	      "PHP",
+	      "Python",
+	      "Ruby",
+	      "Scala",
+	      "Scheme"
+	    ];
+	
+	    $( "#searchTitle" ).autocomplete({
+	      source: runction(request, response){
+	    	  //서버통신 이후 success메소드에서 response를 호출할 것.
+	    	  
+	    	  //ajax 호출
+	    	 
+	      },
+	      focus:function(){},
+	      select: function(){}
+	    });
+	
+	
 });
 
 </script>
 <section id="board-container" class="container">
+	<input type="search" placeholder="제목 검색..." id="searchTitle" class="form-control col-sm-3 d-inline"/>
 	<input type="button" value="글쓰기" id="btn-add" class="btn btn-outline-success" onclick="goBoardForm();"/>
 	<table id="tbl-board" class="table table-striped table-hover">
 		<tr>

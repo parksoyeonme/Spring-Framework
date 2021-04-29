@@ -52,11 +52,20 @@ public class BoardDaoImpl implements BoardDao {
 	public Board selectOneBoard(int no) {
 		return session.selectOne("board.selectOneBoard", no);
 	}
+	
+	@Override
+	public List<Attachment> selectAttchmentList(int no) {
+		return session.selectList("board.selectAttchmentList", no);
+	}
 
 	@Override
-	public List<Attachment> selectAttachment(int no) {
-		// TODO Auto-generated method stub
-		return session.selectList("board.selectAttachment", no);
+	public Board selectOneBoardCollection(int no) {
+		return session.selectOne("board.selectOneBoardCollection", no);
+	}
+
+	@Override
+	public Attachment selectOneAttachment(int no) {
+		return session.selectOne("board.selectOneAttachment", no);
 	}
 
 	

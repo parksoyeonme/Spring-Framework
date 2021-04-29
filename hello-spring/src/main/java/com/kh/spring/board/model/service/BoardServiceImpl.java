@@ -63,12 +63,25 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public Board selectOneBoard(int no) {
+		//게시글 조회
 		Board board = boardDao.selectOneBoard(no);
-		List<Attachment> attachList = boardDao.selectAttachment(no);
-		log.debug("attachList = {}", attachList);
+		//첨부파일 목록조회
+		List<Attachment> attachList = boardDao.selectAttchmentList(no);
+		//board객체에 attachList setting
 		board.setAttachList(attachList);
-		
 		return board;
 	}
+
+	@Override
+	public Board selectOneBoardCollection(int no) {
+		return boardDao.selectOneBoardCollection(no);
+	}
+
+	@Override
+	public Attachment selectOneAttachment(int no) {
+		return boardDao.selectOneAttachment(no);
+	}
+	
+	
 
 }

@@ -20,9 +20,11 @@ div#board-container label.custom-file-label{text-align:left;}
 	<input type="text" class="form-control" 
 		   name="memberId" 
 		   value="${board.memberId}" readonly required>
+
 	<c:forEach items="${board.attachList}" var="attach">
 	<button type="button" 
-			class="btn btn-outline-success btn-block">
+			class="btn btn-outline-success btn-block"
+			onclick="fileDownload(${attach.no});">
 		첨부파일 - ${attach.originalFileName}
 	</button>
 	</c:forEach>
@@ -34,4 +36,11 @@ div#board-container label.custom-file-label{text-align:left;}
 	<input type="datetime-local" class="form-control" name="regDate" 
 		   value='<fmt:formatDate value="${board.regDate}" pattern="yyyy-MM-dd'T'HH:mm:ss"/>'>
 </div>
+<script>
+function fileDownload(no){
+	location.href = "${pageContext.request.contextPath}/board/fileDownload.do?no=" + no;
+	//location.href = "${pageContext.request.contextPath}/board/responseEntity/fileDownload.do?no=" + no;
+}
+
+</script>	
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
