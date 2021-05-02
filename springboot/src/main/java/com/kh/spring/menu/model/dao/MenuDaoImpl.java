@@ -18,4 +18,11 @@ public class MenuDaoImpl implements MenuDao {
 	public List<Menu> selectMenuList() {
 		return session.selectList("menu.selectMenuList");
 	}
+
+	@Override
+	public List<Menu> selectMenuTypeList(String type) {
+		return session.selectList("menu.selectMenuTypeList", type);
+	}
+
+	
 }

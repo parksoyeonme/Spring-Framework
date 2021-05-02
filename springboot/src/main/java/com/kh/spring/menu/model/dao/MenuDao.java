@@ -8,4 +8,8 @@ public interface MenuDao {
 
 	List<Menu> selectMenuList();
 
+	List<Menu> selectMenuTypeList(String type);
+
+	
+
 }

@@ -8,4 +8,7 @@ public interface MenuService {
 
 	List<Menu> selectMenuList();
 
+	List<Menu> selectMenuTypeList(String type);
+
+
 }

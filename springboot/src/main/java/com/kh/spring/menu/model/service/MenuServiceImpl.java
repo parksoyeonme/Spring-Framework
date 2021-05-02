@@ -18,4 +18,10 @@ public class MenuServiceImpl implements MenuService {
 	public List<Menu> selectMenuList() {
 		return menuDao.selectMenuList();
 	}
+
+	@Override
+	public List<Menu> selectMenuTypeList(String type) {
+		return menuDao.selectMenuTypeList(type);
+	}
+
 }

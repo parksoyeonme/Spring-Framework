@@ -13,4 +13,13 @@
 			id desc
 	
 	</select>
+	
+	<select id="selectMenuTypeList" resultType="menu">
+		select
+			*
+		from menu
+		where
+			type = #{type}
+	
+	</select>
 </mapper>

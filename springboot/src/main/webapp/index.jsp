@@ -52,6 +52,9 @@ function displayResultTable(selector, data){
 	
 	$container.html($table);
 }
+
+
+
 </script>	
 </head>
 <body>
@@ -104,17 +107,28 @@ function displayResultTable(selector, data){
 	            <option value="jp">일식</option>
 	            </select>
 	        </div>
-	        <div class="result" id="menuType-result"></div>
+	        <div class="result" id="menuType-result"></div>	
+	        <script>
+	        $("#typeSelector").change(({target:{value}})=>{
+	        	
+	       // console.log(value);
+	        	$.ajax({
+	        		url: `${pageContext.request.contextPath}/menuType/\${value}`,
+					method: "GET",
+					dataType: "json",
+					success: data => {
+						console.log(data);
+						displayResultTable("#menuType-result", data);
+					},
+					error: console.log
+	        		
+	        	});
+	        	
+	        });
 	        
 	        
-	        
-	        
-	        
-	        
-	        
-	        
-	        
-	        
+	      
+	        </script>        
 	    </div>
 	</section>
 	<footer>
