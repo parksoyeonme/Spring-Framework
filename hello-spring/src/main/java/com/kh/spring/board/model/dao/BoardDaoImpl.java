@@ -68,6 +68,12 @@ public class BoardDaoImpl implements BoardDao {
 		return session.selectOne("board.selectOneAttachment", no);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectBoardByTitle(String searchTitle) {
+		return session.selectList("board.selectBoardByTitle", searchTitle);
+	}
+	
+
 	
 	
 	

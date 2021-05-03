@@ -269,6 +269,7 @@ where rnum between 6 and 10;
 
 select *  from attachment;
 select * from board order by no desc;
+select * from member;
 
 select * from board where no='1';
 

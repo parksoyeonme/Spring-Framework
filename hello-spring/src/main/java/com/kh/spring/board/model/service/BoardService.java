@@ -20,6 +20,8 @@ public interface BoardService {
 
 	Attachment selectOneAttachment(int no);
 
+	List<Map<String, Object>> selectBoardByTitle(String searchTitle);
+
 
 
 }

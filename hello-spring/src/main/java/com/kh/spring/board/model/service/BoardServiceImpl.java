@@ -81,6 +81,13 @@ public class BoardServiceImpl implements BoardService {
 	public Attachment selectOneAttachment(int no) {
 		return boardDao.selectOneAttachment(no);
 	}
+
+	@Override
+	public List<Map<String, Object>> selectBoardByTitle(String searchTitle) {
+		return boardDao.selectBoardByTitle(searchTitle);
+	}
+	
+	
 	
 	
 

@@ -251,9 +251,13 @@ public class BoardController {
 						.body(resource);		
 	}
 	
+	@GetMapping("/searchTitle.do")
+	@ResponseBody
+	public List<Map<String, Object>> searchTitle(@RequestParam String searchTitle){
+		log.debug("searchTitle = {}", searchTitle);
+		List<Map<String, Object>> list = boardService.selectBoardByTitle(searchTitle);
+		log.debug("list = {}", list);
+		return list;
+	}
+	
 }
-
-
-
-
-

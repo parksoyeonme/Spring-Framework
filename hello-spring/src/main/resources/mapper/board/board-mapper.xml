@@ -116,4 +116,14 @@
 	<resultMap type="attachment" id="attachmentMap">
 		<result column="status" property="status" jdbcType="CHAR" javaType="_boolean" typeHandler="BooleanTypeHandler"/>
 	</resultMap>
+	
+	<select id="selectBoardByTitle" resultType="map">
+		select
+			no "no",
+			title "title"
+		from 
+			board
+		where 
+			title like '%' || #{searchTitle} || '%'
+	</select>
 </mapper>

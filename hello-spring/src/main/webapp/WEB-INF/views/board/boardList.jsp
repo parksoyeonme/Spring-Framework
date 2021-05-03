@@ -6,6 +6,7 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp">
 	<jsp:param value="게시판" name="title"/>
 </jsp:include>
+
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
@@ -28,44 +29,48 @@ $(() => {
 		location.href = `${pageContext.request.contextPath}/board/boardDetail.do?no=\${no}`;
 	});
 	
-	var availableTags = [
-	      "ActionScript",
-	      "AppleScript",
-	      "Asp",
-	      "BASIC",
-	      "C",
-	      "C++",
-	      "Clojure",
-	      "COBOL",
-	      "ColdFusion",
-	      "Erlang",
-	      "Fortran",
-	      "Groovy",
-	      "Haskell",
-	      "Java",
-	      "JavaScript",
-	      "Lisp",
-	      "Perl",
-	      "PHP",
-	      "Python",
-	      "Ruby",
-	      "Scala",
-	      "Scheme"
-	    ];
-	
-	    $( "#searchTitle" ).autocomplete({
-	      source: runction(request, response){
-	    	  //서버통신 이후 success메소드에서 response를 호출할 것.
-	    	  
-	    	  //ajax 호출
-	    	 
-	      },
-	      focus:function(){},
-	      select: function(){}
-	    });
-	
-	
+    $( "#searchTitle" ).autocomplete({
+      source: function(request, response){
+    	  //서버통신 이후 success메소드에서 response를 호출할 것!
+    	  //console.log(request); // 사용자 입력값
+    	  //console.log(response); // response([{label:?, value:?}, {label:?, value:?},....])
+    	  
+    	  //ajax호출
+    	  $.ajax({
+    		  url: `${pageContext.request.contextPath}/board/searchTitle.do`,
+    		  data: {
+    			  searchTitle: request.term
+    		  },
+    		  //method: "GET",
+    		  //dataType: "json"
+    		  success(data){
+    			  //console.log(data);
+    			  //화살표 함수 객체로 사용시에는 ()한번더 감싸줘야한다
+    			  var res = $.map(data, (board) => ({
+    				  label: board.title,
+    				  value: board.title,
+    				  no: board.no
+    			  }));
+    			  //console.log(res);
+    			  response(res);
+    		  },
+    		  error(xhr, status, err){
+    			  console.log(xhr, status, err);
+    		  }
+    		  
+    	  })
+    	  
+      },
+      focus: function(){ return false },
+      select: function(e, selected){
+    	  //console.log(e);
+    	  //console.log(selected.item.no);
+    	  const no = selected.item.no;
+    	  location.href = `${pageContext.request.contextPath}/board/boardDetail.do?no=\${no}`;
+      }
+    });
 });
+
 
 </script>
 <section id="board-container" class="container">

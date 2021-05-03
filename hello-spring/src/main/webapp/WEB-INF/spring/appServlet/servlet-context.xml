@@ -63,6 +63,7 @@
 			<exclude-mapping path="/board/boardList.do"/>
 			<exclude-mapping path="/board/boardDetail.do"/>
 			<exclude-mapping path="/board/fileDownload.do"/>
+			<exclude-mapping path="/board/searchTitle.do"/>
 			<beans:bean id="loginInterceptor" class="com.kh.spring.common.interceptor.LoginInterceptor"/>
 		</interceptor>
 	</interceptors>

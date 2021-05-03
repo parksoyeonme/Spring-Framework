@@ -94,9 +94,9 @@ public class MemberRestController {
 		log.debug("id = {}", id);
 		Member member = memberService.selectOneMember(id);
 		if(member == null)
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.notFound().build(); //404
 		
-		return ResponseEntity.ok().body(member);
+		return ResponseEntity.ok().body(member); //200
 	}
 	
 }
