@@ -8,7 +8,18 @@ public interface MenuService {
 
 	List<Menu> selectMenuList();
 
-	List<Menu> selectMenuTypeList(String type);
+
+	int insertMenu(Menu menu);
+
+	Menu selectOneMenu(int id);
+
+	int updateMenu(Menu menu);
+
+	int deleteMenu(int id);
+
+	List<Menu> selectMenuListByType(String type);
+
+	
 
 
 }

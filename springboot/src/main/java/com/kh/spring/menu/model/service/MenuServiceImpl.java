@@ -19,9 +19,33 @@ public class MenuServiceImpl implements MenuService {
 		return menuDao.selectMenuList();
 	}
 
+	
 	@Override
-	public List<Menu> selectMenuTypeList(String type) {
-		return menuDao.selectMenuTypeList(type);
+	public int insertMenu(Menu menu) {
+		return menuDao.insertMenu(menu);
 	}
+
+	@Override
+	public Menu selectOneMenu(int id) {
+		return menuDao.selectOneMenu(id);
+	}
+
+	@Override
+	public int updateMenu(Menu menu) {
+		return menuDao.updateMenu(menu);
+	}
+
+	@Override
+	public int deleteMenu(int id) {
+		return menuDao.deleteMenu(id);
+	}
+
+	@Override
+	public List<Menu> selectMenuListByType(String type) {
+		return menuDao.selectMenuListByType(type);
+	}
+
+
+	
 
 }

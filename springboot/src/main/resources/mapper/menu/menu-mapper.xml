@@ -14,7 +14,7 @@
 	
 	</select>
 	
-	<select id="selectMenuTypeList" resultType="menu">
+	<select id="selectMenuListByType" resultType="menu">
 		select
 			*
 		from menu
@@ -22,4 +22,49 @@
 			type = #{type}
 	
 	</select>
+	
+	<insert id="insertMenu">
+		insert into
+			menu
+		values (
+			seq_menu.nextval,
+			#{restaurant},
+			#{name},
+			#{price},
+			#{type},
+			#{taste}
+		)
+	</insert>
+	
+	<select id="selectOneMenu" resultType="menu">
+		select
+			*
+		from
+			menu
+		where
+			id = #{id}
+	
+	</select>
+	
+	<update id="updateMenu">
+		update
+			menu
+		set
+			restaurant = #{restaurant},
+			name = #{name},
+			price = #{price},
+			type = #{type},
+			taste = #{taste}
+		where
+			id = #{id}
+	</update>
+	
+	
+	<delete id="deleteMenu">
+		delete from
+			menu
+		where
+			id = #{id}
+	
+	</delete>
 </mapper>
