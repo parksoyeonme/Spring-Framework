@@ -44,11 +44,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-			.antMatchers("/member/**").authenticated()
+			.antMatchers("/member/**").authenticated() //인증된 사용자만
 			.antMatchers("/board/**").authenticated()
 			.antMatchers("/admin/**").authenticated()
 			.antMatchers("/").permitAll();
-		//인증된 사용자만
+		
 		//모두허용
 		
 		http.formLogin()
@@ -57,7 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.usernameParameter("id")
 			.passwordParameter("password")
 			.defaultSuccessUrl("/")
-			.permitAll();
+			.permitAll(); //모두허용
 		
 		http.logout()
 			.logoutUrl("/member/memberLogout.do") // POST
