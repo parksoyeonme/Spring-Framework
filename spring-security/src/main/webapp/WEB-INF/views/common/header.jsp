@@ -49,7 +49,9 @@ alert("${msg}");
 				<ul class="navbar-nav mr-auto">
 			    	<li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/board/boardList.do">게시판</a></li>
+                    <sec:authorize access="hasRole('ADMIN')">
                     <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/admin/memberList.do">회원관리</a></li>
+                    </sec:authorize>
                     
 			    </ul>
 			    <%-- 1.로그인 하지 않은 경우 --%>
@@ -62,8 +64,9 @@ alert("${msg}");
 			    <%-- 2.로그인한 경우 --%>
 			    <sec:authorize access="isAuthenticated()">
 					<span>
-						<a href="${pageContext.request.contextPath}/member/memberDetail.do">${loginMember.name}
+						<a href="${pageContext.request.contextPath}/member/memberDetail.do">
 							<sec:authentication property="principal.username"/>
+							<sec:authentication property="principal.authorities"/>
 						</a>님, 안녕하세요.
 					</span>
 					&nbsp;
