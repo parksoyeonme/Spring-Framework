@@ -13,7 +13,7 @@
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
-	<!--ㅡmvc:annotation-driven 이지만 생략해서 사용  -->
+	<!--ㅡmvc:annotation-driven 이지만 기본스페이스여서 mvc: 생략해서 사용  -->
 	<!-- @Controller, @Service, @Repository등의 mvc관련 어노테이션 처리 -->
 	<!-- 5.x 이후 MessageConverter빈관리 -->
 	<annotation-driven />

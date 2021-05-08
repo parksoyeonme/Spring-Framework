@@ -267,7 +267,7 @@ from (
 )
 where rnum between 6 and 10;
 
-select *  from attachment;
+select *  from attachment; 
 select * from board order by no desc;
 select * from member;
 
@@ -279,18 +279,89 @@ select * from attachment where board_no = '63';
 -- mybatis collection
 -- board(1) : attachment(N) 관계를 하나의 쿼리로 조회
 
+
+
+--spring-security
 select
-    b.*,
-    a.no attach_no,
-    a.original_filename,
-    a.renamed_filename,
-    a.upload_date,
-    a.download_count,
-    a.status
+    *
 from
-    board b
-    left join
-        attachment a
-        on b.no = a.board_no
-order by
-    b.no = 63;
+    member;
+
+--회원별 복수개의 권한을 관리하는 테이블 authorities
+create table authorities(
+    id varchar2(20),
+    auth varchar2(50), --ROLE_USER, ROLE_ADMIN, ROLE_SALES, ROLE_HR, ROLE_MANAGER...
+    constraint pk_authorities primary key(id, auth),
+    constraint fk_authorities_member_id foreign key(id) references member(id)
+);
+
+insert into
+    authorities(id, auth)
+values(
+    'abcde', 'ROLE_USER'
+);
+
+insert into
+    authorities(id, auth)
+values(
+    'admin','ROLD_ADMIN'
+);
+
+insert into
+    authorities(id, auth)
+values(
+    'admin','ROLD_USER'
+);
+
+select
+    *
+from
+    authorities;
+    
+select
+    *
+from
+    authorities
+where
+    id = 'admin';
+    
+--member - authorities join
+select
+    *
+from
+    member m
+ left join
+ authorities a
+    on m.id = a.id
+where
+    m.id = 'admin';
+
+select * from authorities;
+
+
+--다시
+insert into
+    authorities(id, auth)
+values(
+    'admin','ROLE_ADMIN'
+);
+
+insert into
+    authorities(id, auth)
+values(
+    'admin','ROLE_USER'
+);
+
+select * from authorities;
+
+delete from authorities where id= 'admin';
+
+--remember-me 관련테이블 persistent_logins
+create table persistent_logins (
+    username varchar2(64) not null,
+    series varchar2(64) primary key,
+    token varchar2(64) not null, --username, password, expiry time 등을 hashing한 값
+    last_used timestamp not null
+);
+
+select * from persistent_logins;
